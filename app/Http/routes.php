@@ -39,7 +39,7 @@ Route::get('/userimage/{filename}', [
     'as' => 'account.image'
 ]);
 Route::get('/dashboard', [
-    'uses' => 'PostController@getDashboard',
+    'uses' => 'UserController@getDashboard',
     'as' => 'dashboard',
     'middleware' => 'auth'
 ]);
