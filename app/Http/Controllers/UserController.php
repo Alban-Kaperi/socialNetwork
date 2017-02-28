@@ -13,7 +13,14 @@ class UserController extends Controller
     public function getDashboard(){
       return view('dashboard');
     }
+
     public function postSignUp(Request $request){
+      $this->validate($request,  [
+        'email'=>'required|email|unique:users',
+        'first_name'=>'required|min:4|max:60',
+        'password'=>'required|min:4'
+      ]);
+
       $user= new User();
       $user->first_name=$request->first_name;
       $user->email=$request->email;
@@ -26,6 +33,10 @@ class UserController extends Controller
 
     }
     public function postSignIn(Request $request){
+      $this->validate($request,  [
+        'email'=>'required|email',
+        'password'=>'required'
+      ]);
       if(Auth::attempt(['email'=>$request['email'], 'password'=>$request['password']])){
         return redirect()->route('dashboard');
       }
