@@ -56,5 +56,46 @@ public function handle($request, Closure $next, $guard = null)
 
     return $next($request);
 }
+//-----------------------------------------------------------------------------
+/****************************** Dita 3 ****************************************/
+//controlleri PostController
+public function postCreatePost(Request $request){
+  $this->validate($request,  [
+    'body'=>'required|min:4'
+  ]);
+
+  $post= new Post();
+  $post->body=$request->body;
+  $message="Failed to create post";
+  if($request->user()->posts()->save($post))// e regjistron postimin tek useri i loguar
+  {
+    $message="Post created succesfuly!";
+  }
+  return redirect()->route('dashboard')->with(['message'=>$message]);
+
+}
+
+
+//output i erroreve
+
+@if(count($errors) > 0)
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+@endif
+@if(Session::has('message'))
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 alert alert-success">
+            {{Session::get('message')}}
+        </div>
+    </div>
+@endif
+
 
  ?>
