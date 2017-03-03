@@ -16,42 +16,62 @@
   </div>
 </section>
 
+
+
 <section class="row posts">
 <div class="col-md-6 col-md-offset-3">
   <header>
     <h3>What other people say...</h3>
   </header>
-  <article class="post">
-    <p>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </p>
+  @foreach($posts as $post)
+  <article class="post" data-postid="{{$post->id}}">
+    <p class="post-body">{{$post->body}}</p>
     <div class="info">
-      Posted by Ildi on 12 Feb 2016
+      Posted by {{$post->user->first_name}} on {{$post->created_at}}
     </div>
     <div class="interaction">
       <a href="#">Like</a>|
-      <a href="#">Dislike</a>|
-      <a href="#">Edit</a>|
-      <a href="#">Delete</a>
+      <a href="#">Dislike</a>
+      @if(Auth::user()==$post->user)
+      |
+      <a href="#" class="edit">Edit</a>|
+      <a href="{{ route('post.delete', ['post_id'=>$post->id]) }}">Delete</a>
+      @endif
+
     </div>
   </article>
-<br><br>
-
-  <article class="post">
-    <p>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </p>
-    <div class="info">
-      Posted by Albani on 12 Feb 2016
-    </div>
-    <div class="interaction">
-      <a href="#">Like</a>|
-      <a href="#">Dislike</a>|
-      <a href="#">Edit</a>|
-      <a href="#">Delete</a>
-    </div>
-  </article>
-
+  <br><br>
+  @endforeach
 </div>
 </section>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit Post</h4>
+      </div>
+      <div class="modal-body">
+        <form  action="index.html" method="post">
+          <div class="form-group">
+            <label for="post-body">Edit the Post</label>
+            <textarea name="name" rows="6" class="form-control" id="post-body"></textarea>
+
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="modal-save">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+  var token='{{ csrf_token() }}';
+  var urlEdit='{{ route('edit') }}';
+</script>
 @endsection

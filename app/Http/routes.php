@@ -39,7 +39,7 @@ Route::get('/userimage/{filename}', [
     'as' => 'account.image'
 ]);
 Route::get('/dashboard', [
-    'uses' => 'UserController@getDashboard',
+    'uses' => 'PostController@getDashboard',
     'as' => 'dashboard',
     'middleware' => 'auth'
 ]);
@@ -53,10 +53,17 @@ Route::get('/delete-post/{post_id}', [
     'as' => 'post.delete',
     'middleware' => 'auth'
 ]);
-Route::post('/edit', [
-    'uses' => 'PostController@postEditPost',
-    'as' => 'edit'
-]);
+
+Route::post('/edit', function(\Illuminate\Http\Request $request)
+{
+
+  return response()->json(['message'=>$request['body']]);
+})->name('edit');
+
+// Route::post('/edit', [
+//     'uses' => 'PostController@postEditPost',
+//     'as' => 'edit'
+// ]);
 Route::post('/like', [
     'uses' => 'PostController@postLikePost',
     'as' => 'like'

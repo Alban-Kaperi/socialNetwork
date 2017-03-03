@@ -98,4 +98,71 @@ public function postCreatePost(Request $request){
 @endif
 
 
+//-----------------------------------------------------------------------------
+/****************************** Dita 4 ****************************************/
+// tek PostController shtojme
+public function getDeletePost($post_id){
+  $post=Post::where('id', $post_id)->first();
+  // ose $post=Post::find($post_id)->first();
+  $post->delete();
+  return redirect()->route('dashboard')->with(['message'=>"succesfuly deleted"]);
+
+//kurse tek dashboard.blade.php e rishkruajme ne kete menyre
+@foreach($posts as $post)
+<article class="post">
+  <p>{{$post->body}}</p>
+  <div class="info">
+    Posted by {{$post->user->first_name}} on {{$post->created_at}}
+  </div>
+  <div class="interaction">
+    <a href="#">Like</a>|
+    <a href="#">Dislike</a>|
+    <a href="#">Edit</a>|
+    <a href="{{ route('post.delete', ['post_id'=>$post->id]) }}">Delete</a>
+  </div>
+</article>
+<br><br>
+@endforeach
+//-----------------------------------------------------------------------------
+/****************************** Dita 5 ****************************************/
+/*shtojme edhe  keto dy variabla tek dashboardi ne fund sepse do na duhen per
+ kerkesat e ajax qe te dergojme te dhenat*/
+<script>
+  var token='{{ csrf_token() }}';
+  var urlEdit='{{ route('edit') }}';
+</script>
+
+// tek myjs.js shtojme
+var postId=0;//variabli qe do ruaje id e postimit tek modali
+
+//mbushja e popupit me tekstin e postimit te userit
+$('.post').find('.interaction').find('.edit').on('click', function(event){
+  event.preventDefault();
+  var postBody=$(this).parent().parent().children('.post-body').text();
+  //metoda e atij
+  //var postBody=event.target.parentNode.parentNode.childNodes[1].textContent;
+  postId=$(this).parent().parent().data('postid');
+  //metoda e atij
+  //  postId = event.target.parentNode.parentNode.dataset['postid'];//marrim id nga data-postid tek article
+  $('#post-body').val(postBody);
+  $('#edit-modal').modal();
+});
+
+//dergimi i informacionit te modalit me ajax
+$('#modal-save').on('click', function () {
+  var post_body=$('#post-body').val();//marrim kontetin e postimit  tek modali
+    $.ajax({
+            method: 'POST',
+            url: urlEdit,
+            data: {body: post_body, postId: postId, _token: token}
+    }).done(function (msg) {
+            console.log(msg['message']);
+        });
+});
+
+//-------------------tek routes.php shtojme--------------
+Route::post('/edit', function(\Illuminate\Http\Request $request)
+{
+  return response()->json(['message'=>$request['body']]);
+})->name('edit');
  ?>
