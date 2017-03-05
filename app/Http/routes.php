@@ -54,16 +54,16 @@ Route::get('/delete-post/{post_id}', [
     'middleware' => 'auth'
 ]);
 
-Route::post('/edit', function(\Illuminate\Http\Request $request)
-{
+//Route::post('/edit', function(\Illuminate\Http\Request $request)
+//{
+//
+//  return response()->json(['message'=>$request['body']]);
+//})->name('edit');
 
-  return response()->json(['message'=>$request['body']]);
-})->name('edit');
-
-// Route::post('/edit', [
-//     'uses' => 'PostController@postEditPost',
-//     'as' => 'edit'
-// ]);
+ Route::post('/edit', [
+     'uses' => 'PostController@postEditPost',
+     'as' => 'edit'
+ ]);
 Route::post('/like', [
     'uses' => 'PostController@postLikePost',
     'as' => 'like'

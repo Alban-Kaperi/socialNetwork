@@ -1,9 +1,10 @@
 var postId=0;//variabli qe do ruaje id e postimit tek modali
-
+var postBodyElement=null;// variabel per te ruajtur selektorin
 //mbushja e popupit me tekstin e postimit te userit
 $('.post').find('.interaction').find('.edit').on('click', function(event){
   event.preventDefault();
-  var postBody=$(this).parent().parent().children('.post-body').text();
+  postBodyElement=$(this).parent().parent().children('.post-body');
+  var postBody=postBodyElement.text();
   //metoda e atij
   //var postBody=event.target.parentNode.parentNode.childNodes[1].textContent;
   postId=$(this).parent().parent().data('postid');
@@ -21,6 +22,13 @@ $('#modal-save').on('click', function () {
             url: urlEdit,
             data: {body: post_body, postId: postId, _token: token}
     }).done(function (msg) {
-            console.log(msg['message']);
+        //console.log(msg['message']);
+        //console.log(JSON.stringify(msg));
+        $(postBodyElement).text(msg['new_body']);
+        /*d per ta mbyllur modalin duhet me ate id ose klase me te cilen
+        eshte hapur
+        */
+        $('#edit-modal').modal('hide');
+
         });
 });
