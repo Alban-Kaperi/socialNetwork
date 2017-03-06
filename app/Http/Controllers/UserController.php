@@ -59,7 +59,6 @@ class UserController extends Controller
     {
         $this->validate($request,  [
             'first_name'=>'required|max:128'
-
         ]);
 
         $user=Auth::user();
@@ -67,20 +66,19 @@ class UserController extends Controller
         $user->update();
 
         $file=$request->file('image');
-        $filename=$request->first_name.'-'.$user->id.'.jpg';
+        //$filename=$request->first_name.'-'.$user->id.'.jpg';
+        $filename=$user->id.'.jpg';
+
         if($file){
-           Storage::disk('local')->put($filename, File::get($file));
-
+           Storage::disk('local')->put("/user".$user->id."/".$filename, File::get($file));
         }
-
         return redirect()->route('account');
     }
 
     public function getUserImage($filename)
     {
-        $file=Storage::disk('local')->get($filename);
+        //$file=Storage::disk('local')->get("user".Auth::user()->id.'/'.$filename);
+        $file=Storage::get("user".Auth::user()->id.'/'.$filename);
         return new Response($file,200);
-
-
     }
 }

@@ -15,6 +15,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                      @if(Storage::disk('local')->has('user'.Auth::user()->id."/".Auth::user()->id.'.jpg')&&Auth::user())
+                        <img src="{{route('account.image', ['filename'=>Auth::user()->id.'.jpg'])}}" class="img-responsive img-thumbnail" width="40px">
+                      @endif
+                    </li>
+
                     <li><a href="{{ route('account') }}">Account</a></li>
                     <li><a href="{{ route('logout') }}">Logout</a></li>
                 </ul>

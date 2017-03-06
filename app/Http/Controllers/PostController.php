@@ -53,4 +53,24 @@ class PostController extends Controller
         return response()->json(['new_body'=>$post->body],200);
     }
 
+    public function postLikePost(Request $request){
+        $post_id=$request->postId;
+        //per ta kthyer ne boolean sepse ne marrim nje string si input
+        //$is_like=$request->isLike==='true'?true:false;
+        //eshte e njejta gje me
+        $is_like=$request->isLike==='true';
+        $update=false;
+        $post=Post::find($post_id);
+        if (!$post) {
+          return null;
+        }
+        $user=Auth::user();
+        $like=$user->likes()->where('post_id', $post_id)->first();
+        if ($like) {
+          # code...
+        }
+
+
+    }
+
 }

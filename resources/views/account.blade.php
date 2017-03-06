@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label for="image">Image(only .jpg)</label>
-                <input type="file" class="form-control" id="image">
+                <input type="file" class="form-control" id="image" name="image">
             </div>
             <button type="submit" class="bnt btn-primary">Save Account</button>
             <input type="hidden" value="{{Session::token()}}" name="_token">
@@ -27,13 +27,15 @@
        </div>
     </section>
 
-    @if(Storage::disk('local')->has($user->first_name.'-'.$user->id.'.jpg'))
+
+
+    @if(Storage::disk('local')->has('user'.$user->id."/".$user->id.'.jpg'))
         <section class="row new-post">
             <div class="col-md-6 col-md-offset-3">
-                <img src="{{route('account.image'),['filename'
-                =>$user->first_name.'-'.$user->id.'.jpg']}}"></img>
+              <img src="{{route('account.image', ['filename'=>$user->id.'.jpg'])}}" class="img-responsive">
             </div>
         </section>
     @endif
+
 
 @endsection

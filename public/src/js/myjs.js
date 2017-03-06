@@ -32,3 +32,27 @@ $('#modal-save').on('click', function () {
 
         });
 });
+
+$('.like').on('click', function(event){
+  /*
+  <a href="#" class="like">Like</a>
+  <a href="#" class="like">Dislike</a>
+  ideja eshte qe Like nuk ka previousElementSimbling
+  kurse Dislike ka Like per previousElementSimbling
+  prandaj thjesht kontrollojme kete per te percatkuar kush
+  eshte klikuar
+  */
+  //var isLike= event.target.previousElementSibling == null ? true : false;
+  // eshte e njeta gje me rrjeshtin me poshte o ktheje false per dislike dhe
+  //true per like
+    var isLike= event.target.previousElementSibling == null;
+    postId=$(this).parent().parent().data('postid');
+
+  $.ajax({
+    method:'POST',
+    url: "",
+    data:{isLike:isLike, postId:postId, _token:token}
+  }).done(function() {
+      //change the page
+  });
+});
