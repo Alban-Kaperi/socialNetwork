@@ -16,9 +16,12 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                      @if(Storage::disk('local')->has('user'.Auth::user()->id."/".Auth::user()->id.'.jpg')&&Auth::user())
-                        <img src="{{route('account.image', ['filename'=>Auth::user()->id.'.jpg'])}}" class="img-responsive img-thumbnail" width="40px">
+                      @if (Auth::user())
+                        @if(Storage::disk('local')->has('user'.Auth::user()->id."/".Auth::user()->id.'.jpg'))
+                          <img src="{{route('account.image', ['filename'=>Auth::user()->id.'.jpg'])}}" class="img-responsive img-thumbnail" width="40px">
+                        @endif
                       @endif
+
                     </li>
 
                     <li><a href="{{ route('account') }}">Account</a></li>

@@ -7,6 +7,7 @@ use App\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 use App\Post;
+use App\Like;
 class PostController extends Controller
 {
 
@@ -67,10 +68,25 @@ class PostController extends Controller
         $user=Auth::user();
         $like=$user->likes()->where('post_id', $post_id)->first();
         if ($like) {
-          # code...
+          $already_like=$like->like;//access the like column
+          //if it returns true we already like it else the otherwise
+          $update=true;
+          if ($already_like==$is_like) {
+            $like->delete();// remove the like on the db
+            return null;
+          }
+        }else {
+          $like= new Like();
         }
 
-
+        $like->like=$is_like;
+        $like->user_id=$user->id;
+        $like->post_id=$post->id;
+        if ($update) {
+          $like->update();
+        }
+        $like->save();
+        return null;
     }
 
 }
